@@ -92,3 +92,8 @@ a { color: inherit; text-decoration: none; }
 .live-frame { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; background: #111; }
 .browser-frame__sitebar, .browser-frame__body, .browser-frame__footer { position: relative; z-index: 1; }
 .browser-frame:has(.live-frame) .browser-frame__sitebar, .browser-frame:has(.live-frame) .browser-frame__body { opacity: 0; pointer-events: none; }
+
+/* Put the live Chromium screenshot above the placeholder artwork. */
+.browser-frame .live-frame { z-index: 2; }
+.browser-frame:has(.live-frame) .browser-frame__sitebar, .browser-frame:has(.live-frame) .browser-frame__body { opacity: 0; }
+.browser-frame:has(.live-frame) .browser-frame__footer { z-index: 3; background: rgba(32,35,32,.88); }
