@@ -133,6 +133,11 @@ function App() {
       const { token } = await response.json() as { token: string }
       const socket = new WebSocket(`${BACKEND_URL.replace(/^http/, 'ws')}/ws?token=${encodeURIComponent(token)}`)
       socket.onmessage = (event) => {
+        if (event.data instanceof Blob) {
+          const frameUrl = URL.createObjectURL(event.data)
+          setLiveSession((current) => ({ socket, frameData: frameUrl, extensionEnabled: current?.extensionEnabled ?? false }))
+          return
+        }
         const message = JSON.parse(event.data) as { type?: string; data?: string; mime?: string; extensionEnabled?: boolean }
         if (message.type === 'ready') setLiveSession((current) => ({ socket, frameData: current?.frameData || '', extensionEnabled: Boolean(message.extensionEnabled) }))
         if (message.type === 'frame' && message.data) setLiveSession((current) => ({ socket, frameData: `data:${message.mime || 'image/jpeg'};base64,${message.data}`, extensionEnabled: current?.extensionEnabled ?? false }))
